@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float maxSpeed = 5f;
     [SerializeField] private Rigidbody playerRigid;
+    [SerializeField] private bool useNormalized;
+
+    private Vector3 oldPosition;
      
     // Start is called before the first frame update
     void Start()
@@ -16,43 +20,49 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MovePlayer();
+        if(useNormalized == false)
+        {
+            MovePlayer();
+        }
+        if(useNormalized == true)
+        {
+            MovePlayerNormalized();
+        }
     }
 
     private void MovePlayer()
-    {        
-        //if(Input.GetKey(KeyCode.W))
-        //{
-        //    transform.Translate(transform.forward * moveSpeed * Time.deltaTime);
-        //}
-        //if(Input.GetKey(KeyCode.S))
-        //{
-        //    transform.Translate(-transform.forward * moveSpeed * Time.deltaTime);
-        //}
-        //if(Input.GetKey(KeyCode.A))
-        //{
-        //    transform.Translate(-transform.right * moveSpeed * Time.deltaTime);
-        //}
-        //if(Input.GetKey(KeyCode.D))
-        //{
-        //    transform.Translate(transform.right * moveSpeed * Time.deltaTime);
-        //}
+    {
+        float horizontalMove = Input.GetAxis("Horizontal");
+        float verticalMove = Input.GetAxis("Vertical");
 
-        if(Input.GetAxis("Horizontal") > 0)
+        if (horizontalMove > 0.01 || horizontalMove < -0.01)
         {
-            transform.Translate(transform.right * moveSpeed * Time.deltaTime);
+            transform.Translate(transform.right * Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime);
         }
-        if(Input.GetAxis("Horizontal") < 0)
+        if (verticalMove > 0.01 || verticalMove < -0.01)
         {
-            transform.Translate(-transform.right * moveSpeed * Time.deltaTime);
+            transform.Translate(transform.forward * Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime);
         }
-        if(Input.GetAxis("Vertical") > 0)
-        {
-            transform.Translate(transform.forward * moveSpeed * Time.deltaTime);
-        }
-        if(Input.GetAxis("Vertical") < 0)
-        {
-            transform.Translate(-transform.forward * moveSpeed * Time.deltaTime);
-        }
+
+        var speed = Vector3.Distance(oldPosition, transform.position) / Time.deltaTime;
+        oldPosition = transform.position;
+
+        Debug.Log(speed);
+    }
+
+    private void MovePlayerNormalized()
+    {
+        float horizontalMove = Input.GetAxis("Horizontal");
+        float verticalMove = Input.GetAxis("Vertical");
+
+        Vector3 move = new Vector3(horizontalMove, 0, verticalMove);
+        move.Normalize();
+
+        transform.position += move * moveSpeed * Time.deltaTime;
+
+        var speed = Vector3.Distance(oldPosition, transform.position) / Time.deltaTime;
+        oldPosition = transform.position;
+
+        Debug.Log(speed);
     }
 }
