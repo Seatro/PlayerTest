@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private Rigidbody playerRigid;
      
     // Start is called before the first frame update
     void Start()
@@ -19,22 +20,39 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void MovePlayer()
-    {
-        if(Input.GetKey(KeyCode.W))
+    {        
+        //if(Input.GetKey(KeyCode.W))
+        //{
+        //    transform.Translate(transform.forward * moveSpeed * Time.deltaTime);
+        //}
+        //if(Input.GetKey(KeyCode.S))
+        //{
+        //    transform.Translate(-transform.forward * moveSpeed * Time.deltaTime);
+        //}
+        //if(Input.GetKey(KeyCode.A))
+        //{
+        //    transform.Translate(-transform.right * moveSpeed * Time.deltaTime);
+        //}
+        //if(Input.GetKey(KeyCode.D))
+        //{
+        //    transform.Translate(transform.right * moveSpeed * Time.deltaTime);
+        //}
+
+        if(Input.GetAxis("Horizontal") > 0)
         {
-            transform.Translate(transform.forward * moveSpeed * Time.deltaTime);
+            transform.Translate(transform.right * moveSpeed * Time.deltaTime);
         }
-        if(Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(-transform.forward * moveSpeed * Time.deltaTime);
-        }
-        if(Input.GetKey(KeyCode.A))
+        if(Input.GetAxis("Horizontal") < 0)
         {
             transform.Translate(-transform.right * moveSpeed * Time.deltaTime);
         }
-        if(Input.GetKey(KeyCode.D))
+        if(Input.GetAxis("Vertical") > 0)
         {
-            transform.Translate(transform.right * moveSpeed * Time.deltaTime);
+            transform.Translate(transform.forward * moveSpeed * Time.deltaTime);
+        }
+        if(Input.GetAxis("Vertical") < 0)
+        {
+            transform.Translate(-transform.forward * moveSpeed * Time.deltaTime);
         }
     }
 }
