@@ -32,9 +32,8 @@ public class PlayerMovement : MonoBehaviour
 
         transform.position += move * moveSpeed * Time.deltaTime;
 
+        // Unused, but may be useful later.
         var speed = Vector3.Distance(oldPosition, transform.position) / Time.deltaTime;
         oldPosition = transform.position;
-
-        Debug.Log(speed);
     }
 }
