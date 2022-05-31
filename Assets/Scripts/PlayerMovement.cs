@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float maxSpeed = 5f;
-    [SerializeField] private Rigidbody playerRigid;
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float sprintIncrease = 3f;
 
     private Vector3 oldPosition;
-     
-    // Start is called before the first frame update
-    void Start()
+    private float normalSpeed;
+
+    private void Start()
     {
-        
+        normalSpeed = moveSpeed;
     }
 
     // Update is called once per frame
@@ -26,6 +25,15 @@ public class PlayerMovement : MonoBehaviour
     {
         float horizontalMove = Input.GetAxis("Horizontal");
         float verticalMove = Input.GetAxis("Vertical");
+
+        if(Input.GetButtonDown("Sprint"))
+        {
+            moveSpeed += sprintIncrease;
+        }
+        else if(Input.GetButtonUp("Sprint"))
+        {
+            moveSpeed = normalSpeed;
+        }
 
         Vector3 move = new Vector3(horizontalMove, 0, verticalMove);
         move.Normalize();
