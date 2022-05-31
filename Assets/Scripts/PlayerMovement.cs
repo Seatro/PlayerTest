@@ -55,9 +55,6 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = new Vector3(horizontalMove, 0, verticalMove);
         move.Normalize();
 
-        //NEEDS A DIFFERENT SOLUTION.
-        //transform.localPosition += move * moveSpeed * Time.deltaTime;
-
         transform.Translate(move * moveSpeed * Time.deltaTime, Space.Self);
 
         // Unused, but may be useful later.
@@ -99,14 +96,4 @@ public class PlayerMovement : MonoBehaviour
         var distanceToGround = Vector3.Distance(transform.position, hit.point);
         Debug.Log(hit.distance);
     }
-
-    //private void SuperJump()
-    //{
-    //    RaycastHit hit;
-    //    Physics.Raycast(groundDetector.position, -transform.up, out hit, Mathf.Infinity);
-
-    //    if (hit.distance > 0.4f) return;
-
-    //    playerRigid.AddForce(transform.up * superJumpAmount, ForceMode.Impulse);
-    //}
 }
