@@ -44,7 +44,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = new Vector3(horizontalMove, 0, verticalMove);
         move.Normalize();
 
-        transform.position += move * moveSpeed * Time.deltaTime;
+        //NEEDS A DIFFERENT SOLUTION.
+        //transform.localPosition += move * moveSpeed * Time.deltaTime;
+
+        transform.Translate(move * moveSpeed * Time.deltaTime, Space.Self);
 
         // Unused, but may be useful later.
         var speed = Vector3.Distance(oldPosition, transform.position) / Time.deltaTime;
@@ -53,12 +56,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void MoveCamera()
     {
-        float vertical = Input.GetAxis("Mouse X");
-        float horizontal = Input.GetAxis("Mouse Y");
+        float horizontal = Input.GetAxis("Mouse X");
+        float vertical = Input.GetAxis("Mouse Y");
 
-        float newPlayerRotation = cameraTransform.localRotation.eulerAngles.x - mouseXSensitivity * horizontal;
-        float newCameraRotation = cameraTransform.localRotation.eulerAngles.y + mouseYSensitivity * vertical;
+        float newPlayerXRotation = transform.localRotation.eulerAngles.y + mouseXSensitivity * horizontal;
+        float newCameraYRotation = cameraTransform.localRotation.eulerAngles.x - mouseYSensitivity * vertical;
 
-        cameraTransform.localRotation = Quaternion.Euler(newPlayerRotation, newCameraRotation, 0);
+        transform.rotation = Quaternion.Euler(transform.rotation.x, newPlayerXRotation, transform.rotation.z);
+        cameraTransform.localRotation = Quaternion.Euler(newCameraYRotation, cameraTransform.localRotation.y, cameraTransform.localRotation.z);
     }
 }

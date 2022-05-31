@@ -172,7 +172,7 @@ MonoBehaviour:
   sprintIncrease: 3
   mouseXSensitivity: 0.5
   mouseYSensitivity: 0.5
-  cameraTransform: {fileID: 1754587191}
+  cameraTransform: {fileID: 887166874}
 --- !u!1 &1268854762
 GameObject:
   m_ObjectHideFlags: 0
