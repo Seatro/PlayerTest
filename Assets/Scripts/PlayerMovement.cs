@@ -6,15 +6,24 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float sprintIncrease = 3f;
+    [SerializeField] private float jumpAmount = 5f;
+    [SerializeField] private float superJumpAmount = 30f;
     [SerializeField] private float mouseXSensitivity = 0.5f;
     [SerializeField] private float mouseYSensitivity = 0.5f;
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Transform groundDetector;
+    [SerializeField] private Rigidbody playerRigid;
+
+    private bool superJump;
+    private float originalJumpAmount;
 
     private Vector3 oldPosition;
     private float normalSpeed;
     private void Start()
     {
         normalSpeed = moveSpeed;
+
+        originalJumpAmount = jumpAmount;
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -25,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
 
         MoveCamera();
+
+        Jump();
     }
 
     private void MovePlayer()
@@ -65,4 +76,37 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(transform.rotation.x, newPlayerXRotation, transform.rotation.z);
         cameraTransform.localRotation = Quaternion.Euler(newCameraYRotation, cameraTransform.localRotation.y, cameraTransform.localRotation.z);
     }
+
+    private void Jump()
+    {
+        if (!Input.GetButtonDown("Jump")) return;
+
+        if (Input.GetButton("Fire1"))
+        {
+            superJump = true;
+            jumpAmount = 30f;
+        }
+        
+        RaycastHit hit;
+        Physics.Raycast(groundDetector.position, -transform.up, out hit, Mathf.Infinity);
+
+        if (hit.distance > 0.4f) return;
+
+        playerRigid.AddForce(transform.up * jumpAmount, ForceMode.Impulse);
+
+        jumpAmount = originalJumpAmount;
+
+        var distanceToGround = Vector3.Distance(transform.position, hit.point);
+        Debug.Log(hit.distance);
+    }
+
+    //private void SuperJump()
+    //{
+    //    RaycastHit hit;
+    //    Physics.Raycast(groundDetector.position, -transform.up, out hit, Mathf.Infinity);
+
+    //    if (hit.distance > 0.4f) return;
+
+    //    playerRigid.AddForce(transform.up * superJumpAmount, ForceMode.Impulse);
+    //}
 }
